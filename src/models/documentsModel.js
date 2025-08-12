@@ -1,4 +1,3 @@
-// models/documentsModel.js
 const pool = require('../config/db');
 const { AppError } = require('../utils/errors');
 
@@ -67,8 +66,8 @@ async function insertChunks(docId, chunks, texts, vectors) {
       const params = [
         docId,
         texts[i] || '',
-        `${docId}-${i}`, // qdrant_id (matches your service's points[i].id)
-        i, // position
+        `${docId}-${i}`, 
+        i, 
       ];
       await connection.execute(sql, params);
     }

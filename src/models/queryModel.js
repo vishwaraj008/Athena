@@ -1,4 +1,4 @@
-const db = require('../config/db'); // your mysql connection/pool module
+const db = require('../config/db'); 
 
 async function insertQueryLog({
   tenant_id = null,

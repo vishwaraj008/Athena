@@ -14,15 +14,11 @@ if (!geminiApiKey) {
 
 const genAI = new GoogleGenerativeAI(geminiApiKey);
 
-// Embedding model instance
 const embeddingModel = genAI.getGenerativeModel({ model: 'models/embedding-001' });
 
-// Text generation model instance
 const textModel = genAI.getGenerativeModel({ model: 'models/gemini-1.5-flash' });
 
-/**
- * Generate an embedding vector for a given text using Gemini embeddings.
- */
+
 async function embedQuery(text) {
   try {
     if (!text || typeof text !== 'string' || text.trim() === '') {
@@ -61,9 +57,7 @@ async function embedQuery(text) {
   }
 }
 
-/**
- * Generate a text answer from a query and contextual information using Gemini text generation.
- */
+
 async function generateAnswer(query, context) {
   try {
     if (!query || typeof query !== 'string' || query.trim() === '') {

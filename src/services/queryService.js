@@ -1,7 +1,7 @@
 const { AppError } = require('../utils/errors');
 const qdrantClient = require('../utils/qdrantClient');
 const documentsModel = require('../models/documentsModel');
-const queryLogModel = require('../models/queryModel'); // import query log model
+const queryLogModel = require('../models/queryModel'); 
 const llmService = require('./llmService');
 
 async function runQuery(queryText, userId = null) {
@@ -15,10 +15,9 @@ async function runQuery(queryText, userId = null) {
       );
     }
 
-    // Step 1: Embed the query text using embedding model (reuse same as ingestion)
+    
     const queryEmbedding = await llmService.embedQuery(queryText);
 
-    // Step 2: Search Qdrant for nearest chunks (top-k, e.g. 5)
     const searchResult = await qdrantClient.search({
       collection_name: 'athena_docs',
       vector: queryEmbedding,
@@ -33,17 +32,13 @@ async function runQuery(queryText, userId = null) {
       };
     }
 
-    // Extract texts and doc_ids from payload
     const contextTexts = searchResult.map((res) => res.payload.text);
     const docIds = [...new Set(searchResult.map((res) => res.payload.doc_id))];
 
-    // Optionally: Fetch doc metadata from MySQL for source info
     const docsMeta = await documentsModel.getDocumentsByIds(docIds);
 
-    // Step 3: Compose context string for LLM input
     const contextCombined = contextTexts.join('\n---\n');
 
-    // Step 4: Call LLM service to get answer with context
     const modelUsed = 'gemini';
     const startTime = Date.now();
     const answer = await llmService.generateAnswer(queryText, contextCombined);
@@ -51,7 +46,6 @@ async function runQuery(queryText, userId = null) {
 
     const resultsCount = searchResult.length;
 
-    // Step 5: Log the query in MySQL
     try {
       await queryLogModel.insertQueryLog({
         tenant_id: userId,

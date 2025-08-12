@@ -1,4 +1,3 @@
-// utils/qdrantClient.js
 const { QdrantClient } = require('@qdrant/js-client-rest');
 const { AppError } = require('../utils/errors');
 
@@ -15,7 +14,7 @@ async function createCollectionIfNotExists(collectionName, vectorSize) {
       await qdrant.createCollection(collectionName, {
         vectors: {
           size: vectorSize,
-          distance: 'Cosine', // or 'Euclid', as per your use case
+          distance: 'Cosine', 
         },
       });
       console.log(`Created collection '${collectionName}'`);
@@ -53,7 +52,6 @@ async function upsert({ collectionName, collection_name, points }) {
       );
     }
 
-    // Create collection if not exists with correct vector size
     await createCollectionIfNotExists(collection, vectorSize);
 
     // Validate vector size matches collection config

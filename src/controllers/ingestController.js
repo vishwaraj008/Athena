@@ -24,7 +24,6 @@ async function ingestDocuments(req, res, next) {
       );
     }
 
-    // Call service with payload and full req.file object
     const result = await ingestionService.ingestDocuments(
       { source_type, title, description: req.body.description, tags: req.body.tags },
       req.file

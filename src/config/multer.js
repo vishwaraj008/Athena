@@ -4,7 +4,6 @@ const fs = require('fs');
 
 const DOCS_PATH = process.env.DOCS_PATH || path.join(__dirname, '../docs');
 
-// Ensure docs folder exists
 if (!fs.existsSync(DOCS_PATH)) {
     fs.mkdirSync(DOCS_PATH, { recursive: true });
 }

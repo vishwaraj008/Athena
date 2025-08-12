@@ -9,15 +9,15 @@ const { loadPDF, loadDocx, loadTxt } = require('../utils/documentLoader');
 const documentsModel = require('../models/documentsModel');
 const { v4: uuidv4 } = require('uuid');
 
-// Always use Gemini embeddings
+
 const embeddingModel = new GoogleGenerativeAIEmbeddings({
   apiKey: process.env.GOOGLE_API_KEY,
-  model: 'embedding-001', // Gemini's embedding model
+  model: 'embedding-001', 
 });
 
 async function ingestDocuments(payload, uploadedFile) {
   try {
-    // Validate payload
+    
     if (!payload.title || !payload.source_type) {
       throw new AppError(
         'Missing required fields: title, source_type',
@@ -97,16 +97,15 @@ async function ingestDocuments(payload, uploadedFile) {
     // Embed chunks
     const vectors = await embeddingModel.embedDocuments(texts);
 
-    // Store document metadata in MySQL
+    
     const docId = await documentsModel.insertDocument({
       title: payload.title,
       source_type: payload.source_type,
-      source_path: uploadedFile.originalname, // store original name instead of tmp path
+      source_path: uploadedFile.originalname, 
       description: payload.description || null,
       tags: payload.tags || null,
     });
 
-    // Store chunk metadata in MySQL
     await documentsModel.insertChunks(docId, chunks, texts, vectors);
 
     // Prepare Qdrant points

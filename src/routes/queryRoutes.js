@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const {runQuery} = require('../controllers/queryController');
-
-// POST /query
+const {apiValidator} = require('../middleware/apiKey');
 // Accepts user queries for retrieval-augmented generation
-router.post('/', runQuery);
+router.post('/',apiValidator, runQuery);
 
 module.exports = router;

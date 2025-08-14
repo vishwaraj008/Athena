@@ -3,14 +3,14 @@ const { AppError, ValidationError } = require('../utils/errors');
 
 async function runQuery(req, res, next) {
   try {
-    const { query } = req.body;
-    if (!query || typeof query !== 'string' || query.trim() === '') {
+    const { prompt } = req.body;
+    if (!prompt || typeof prompt !== 'string' || prompt.trim() === '') {
       throw new ValidationError('Query text is required', {
         controller: 'query.controller.runQuery',
       });
     }
 
-    const response = await retrievalService.runQuery(query);
+    const response = await retrievalService.runQuery(prompt);
     if (!response) {
       throw new AppError(
         'Failed to process query',
